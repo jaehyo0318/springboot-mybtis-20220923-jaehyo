@@ -1,0 +1,32 @@
+#container {
+    padding: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    border: 1px solid #dbdbdb;
+    width: 800px;
+}
+
+th, td {
+    border: 1px solid #dbdbdb;
+    padding: 10px 20px;
+    height: 40px;
+}
+
+th {
+    width: 150px;
+}
+
+.news-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.news-content {
+    height: 400px;
+}

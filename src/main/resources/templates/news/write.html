@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://wwww.thymeleaf.org>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            margin: 0px auto;
+
+            width: 1100px;
+            height: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #dbdbdb;
+        }
+
+        th, td {
+            border: 1px solid #dbdbdb;
+        }
+
+        input, textarea {
+            border: none;
+            outline: none;
+
+            width: 100%;
+            height: 100%;
+        }
+
+        textarea {
+            height: 300px;
+
+            width: 500px;
+
+            resize: none;
+        }
+
+        input:focus, textarea:focus {
+            background-color: #fafafa;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <form enctype="multipart/form-data">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <h1>뉴스정보</h1>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            <label for="title">제목</label>
+                        </th>
+                        <td>
+                            <input type="text" id="title" name="title">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="broadcasting-name">방송국명</label>
+                        </th>
+                        <td>
+                            <input type="text" id="broadcasting-name" name="broadcastingName">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="upload-img">첨부이미지</label>
+                        </th>
+                        <td>
+                            <!-- 파일, 이미지만 --> <!-- multiple => 파일 여러개 가능-->
+                                <input type="file" name="files"  multiple id="upload-img" accept="image/gif, image/jpg, image/jpeg, image/png" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="content">기사내용</label>
+                        </th>
+                        <td>
+                            <textarea id="content" name="content"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">
+                            <button type="button" class="write-button">작성하기</button>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </form> 
+        <div class="preview">
+
+        </div>
+    </div>
+
+    <script>
+
+        const writeButton = document.querySelector(".write-button");
+
+        writeButton.onclick = () => {
+            request();
+        }
+
+        
+        function getFormData() {
+            const form = document.querySelector("form");
+
+            return new FormData(form);
+        }
+
+        function request() {
+            $.ajax({
+                async:false,
+                type:"post",
+                url: "/api/news",
+                enctype: "multipart/form-data", 
+                contentType: false,
+                processData: false,
+                data: getFormData(),
+                dataType: "json",
+                success: (response) => {
+                    console.log(response);
+                    preview(response);
+                },
+                error: (error) => {
+                    console.log(error);
+                }
+
+            });
+        }
+
+        
+        function preview(response) {
+            const preview = document.querySelector(".preview");
+
+            preview.innerHTML = `
+                <h2>코드: ${response.code}</h2>
+                <h2>메세지: ${response.msg}</h2>
+                <h2>제목: ${response.data.title}</h2>
+                <h2>방송국명: ${response.data.broadcastingName}</h2>
+                <h2>파일이름: ${response.data.fileNames}</h2>
+                <h2>내용: ${response.data.content}</h2>
+                
+            `;
+        }
+
+
+    </script>
+</body>
+</html>

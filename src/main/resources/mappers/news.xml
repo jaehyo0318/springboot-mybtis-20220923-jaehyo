@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mybatis20220923jaehyo.repository.NewsRepository">
+
+    <resultMap id="news_file" type="com.boot.mybatis20220923jaehyo.domain.NewsFile">
+        <result property="file_origin_name" column="file_origin_name"></result>
+        <result property="file_temp_name" column="file_temp_name"></result>
+    </resultMap>
+    <resultMap id="news" type="com.boot.mybatis20220923jaehyo.domain.News">
+        <result property="news_id" column="news_id"></result>
+        <result property="news_title" column="news_title"></result>
+        <result property="news_writer" column="news_writer"></result>
+        <result property="news_broadcasting" column="news_broadcasting"></result>
+        <result property="news_content" column="news_content"></result>
+        <result property="create_date" column="create_date"></result>
+        <collection property="news_file" javaType="list" resultMap="news_file"></collection>
+    </resultMap>
+
+
+    <insert
+            id="save"
+            parameterType="com.boot.mybatis20220923jaehyo.domain.News"
+            useGeneratedKeys="true"
+            keyProperty="news_id"
+    >
+        insert into
+            news_mst
+        values (
+            0,
+            #{news_title},
+            #{news_writer},
+            #{news_broadcasting},
+            #{news_content},
+            now(),
+            now()
+        )
+    </insert>
+
+    <select id="getNews" resultMap="news">
+        SELECT
+        nm.news_id,
+        nm.news_title,
+        nm.news_writer,
+        nm.news_broadcasting,
+        nm.news_content,
+
+        nf.file_origin_name,
+        nf.file_temp_name,
+
+        nm.create_date
+
+        FROM
+        news_mst nm
+        LEFT OUTER JOIN news_file nf ON(nf.news_id = nm.news_id)
+        WHERE
+        nm.news_id = #{news_id};
+
+    </select>
+
+    <insert
+            id="saveFiles"
+            parameterType="java.util.List"
+            useGeneratedKeys="true"
+            keyProperty="file_id"
+    >
+        insert into
+            news_file
+        values
+        <foreach collection="newsFileList" item="newsFile" separator=",">
+            (
+                0,
+                #{newsFile.news_id},
+                #{newsFile.file_origin_name},
+                #{newsFile.file_temp_name},
+                now(),
+                now()
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

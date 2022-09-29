@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mybatis20220923jaehyo.repository.SignupRepository">
+
+    <insert
+            id="save"
+            parameterType="com.boot.mybatis20220923jaehyo.domain.User"
+            useGeneratedKeys="true"
+            keyProperty="user_code"
+    >
+        insert into
+            user_mst
+        values (
+            0,
+            #{user_id},
+            #{user_password},
+            #{user_name},
+            #{user_email}
+        )
+    </insert>
+</mapper>
