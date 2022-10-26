@@ -54,7 +54,7 @@ public class NewsController {
                 Path uploadPath = Paths.get(filePath, "news/" + tempFileName);
                 // path객체(경로) 설정, 단순 경로설정
 
-                File f = new File(filePath, "news"); // 없는 포일을 만들어줌, 파일
+                File f = new File(filePath, "news"); // 없는 파일을 만들어줌, 파일
                 if(!f.exists()) { // f.exists() => 경로가 존재하면 true
                     f.mkdirs(); // 경로를 만들어줌
                 }
